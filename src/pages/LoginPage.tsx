@@ -5,7 +5,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 import googleLogog from "@/assets/images/GoogleLogo (1).png";
 import { useMutation } from '@apollo/client'
@@ -20,6 +20,8 @@ const formSchema = z.object({
 
 const LoginPage = () => {
     const navigate = useNavigate()
+    const location = useLocation()
+    const from = location.state?.from?.pathname || "/"
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -43,6 +45,7 @@ const LoginPage = () => {
                 }
             })
             toast.success("Login Successfully!")
+            navigate(from, { replace: true })
         } catch (error) {
             if (error instanceof Error) {
                 toast.error(error.message)
@@ -63,6 +66,7 @@ const LoginPage = () => {
             }
         }
     }
+    console.log(location.state)
     return (<div className="flex flex-col md:flex-row w-full h-full font-inter">
         {/**Signup form */}
         <div className="bg-backgroundGrey w-full md:w-[65%] min-h-screen flex flex-col justify-center items-center px-5 py-16">

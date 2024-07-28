@@ -14,3 +14,35 @@ export const AUTHUSER = gql`
   }
 
 `
+
+export const USER = gql`
+ query GetUser{
+   user{
+    email,
+    name,
+    profilePicture,
+    gender,
+    phoneNumber,
+    event{
+        organizerId,
+        title,
+        location,
+        startDate,
+        endDate,
+        imageUrl,
+        description,
+        eventType,
+        price,
+        isFree, 
+    },
+    BookedEvent {
+      ticketDetail {
+        id,
+        price,
+        title,
+        quantity
+      }
+    }
+   }
+ }
+`

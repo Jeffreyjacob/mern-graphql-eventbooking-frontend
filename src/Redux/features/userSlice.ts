@@ -7,8 +7,8 @@ type InitialState = {
 }
 
 const initialState:InitialState = {
-   user:null,
-   auth:false
+    user: JSON.parse(localStorage.getItem("user") || "null"),
+  auth: JSON.parse(localStorage.getItem("auth") || "false"),
 }
 
 
@@ -18,11 +18,15 @@ const userSlice = createSlice({
     reducers:{
         SaveUser:(state,action:PayloadAction<UserType>)=>{
            state.user = action.payload,
-           state.auth = true
+           state.auth = true;
+           localStorage.setItem("user",JSON.stringify(action.payload))
+           localStorage.setItem("auth","true")
         },
         LogOut:(state)=>{
             state.user = null,
-            state.auth = false
+            state.auth = false;
+            localStorage.removeItem("user");
+            localStorage.setItem("auth", "false");
         }
     }
 })

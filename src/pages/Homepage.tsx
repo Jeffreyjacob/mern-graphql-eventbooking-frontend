@@ -11,7 +11,6 @@ import { EventType, eventTypeData } from "@/lib/type";
 import { useQuery } from "@apollo/client";
 import { Search } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 
 
 type SearchType = {
@@ -112,12 +111,6 @@ const Homepage = () => {
                     </div>
                    }
                 </div>
-
-                <Button>
-                    <Link to={`/updateEvent/66a22d10d7f6d7fac9d4db30`}>
-                    Update
-                    </Link>
-                </Button>
             </div>
         </div>
     )

@@ -7,30 +7,33 @@ import { Card } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { EVENT_BY_ID, SUGGESTED_EVENT } from "@/graphql/quries/eventQuery"
 import { EventDetail, EventType } from "@/lib/type"
+import { RootState } from "@/Redux/store"
 import { useQuery } from "@apollo/client"
 import { format } from "date-fns"
-import { useParams } from "react-router-dom"
+import { useSelector } from "react-redux"
+import { Link, useParams } from "react-router-dom"
 
 type EventDetailType = {
   event: EventDetail
 }
 type SuggestedEventType = {
-  suggestedEvent:EventType[]
+  suggestedEvent: EventType[]
 }
 
 const EventDetailPage = () => {
+  const auth = useSelector((state: RootState) => state.user.auth)
   const { id } = useParams()
   const { data, loading } = useQuery<EventDetailType>(EVENT_BY_ID, { variables: { id: id } })
-  const {data:SugEvent,loading:suggestedLoading} = useQuery<SuggestedEventType>(SUGGESTED_EVENT,{variables:{id:id}})
+  const { data: SugEvent, loading: suggestedLoading } = useQuery<SuggestedEventType>(SUGGESTED_EVENT, { variables: { id: id } })
   if (!data) {
     return
   }
-  if(loading){
+  if (loading) {
     return <div className="w-full h-full lg:px-5">
-      <Skeleton className="w-full h-[370px] md:h-[400px] bg-grey100"/>
+      <Skeleton className="w-full h-[370px] md:h-[400px] bg-grey100" />
       <div className="w-full flex flex-col md:flex-row">
-         <Skeleton className="bg-grey100 w-full md:w-[50%] h-[300px]"/>
-         <Skeleton className="bg-grey100 w-full md:w-[50%] h-[300px]"/>
+        <Skeleton className="bg-grey100 w-full md:w-[50%] h-[300px]" />
+        <Skeleton className="bg-grey100 w-full md:w-[50%] h-[300px]" />
       </div>
     </div>
   }
@@ -51,7 +54,13 @@ const EventDetailPage = () => {
               <h5 className="text-[24px] font-bold">Date & Time</h5>
               <p className="text-[16px] font-normal text-grey600 mt-2">{format(data.event.startDate, "PPP")}</p>
               <div className="flex flex-col gap-4 mt-7">
-                 <EventCheckout event={data.event}/>
+                {
+                  auth ? <EventCheckout event={data.event} /> : <Link to="/login">
+                    <Button className="bg-primaryBlue hover:bg-primaryBlue text-white hover:text-white w-full" >
+                      Book now
+                    </Button>
+                  </Link>
+                }
                 <Button className="w-full bg-grey300 hover:bg-grey300/90 text-white hover:text-white">
                   Program Promoter
                 </Button>
@@ -103,7 +112,13 @@ const EventDetailPage = () => {
           <h5 className="text-[24px] font-bold">Date & Time</h5>
           <p className="text-[16px] font-normal text-grey600 mt-2">{format(data.event.startDate, "PPP")}</p>
           <div className="flex flex-col gap-4 mt-7">
-            <EventCheckout event={data.event}/>
+            {
+              auth ? <EventCheckout event={data.event} /> : <Link to="/login">
+                <Button className="bg-primaryBlue hover:bg-primaryBlue text-white hover:text-white w-full" >
+                  Book now
+                </Button>
+              </Link>
+            }
             <Button className="w-full bg-grey300 hover:bg-grey300/90 text-white hover:text-white">
               Program Promoter
             </Button>
@@ -112,24 +127,24 @@ const EventDetailPage = () => {
         </Card>
       </div>
 
-     {/**Suggested Events */}
-     <div className="w-full  mt-10 px-4 lg:px-10 ">
-     <h5 className="text-[24px] font-bold mb-4">Other events you may like</h5>
-       <div>
+      {/**Suggested Events */}
+      <div className="w-full  mt-10 px-4 lg:px-10 ">
+        <h5 className="text-[24px] font-bold mb-4">Other events you may like</h5>
+        <div>
           {
             suggestedLoading ? <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              <EventCardSkeleton/>
-              <EventCardSkeleton/>
-            </div>: <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {
-              SugEvent?.suggestedEvent.slice(0,3).map((event,index)=>(
-                <EventCard event={event} key={index}/>
-              ))
-             }
+              <EventCardSkeleton />
+              <EventCardSkeleton />
+            </div> : <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {
+                SugEvent?.suggestedEvent.slice(0, 3).map((event, index) => (
+                  <EventCard event={event} key={index} />
+                ))
+              }
             </div>
           }
-       </div>
-     </div>
+        </div>
+      </div>
 
     </div>
   )

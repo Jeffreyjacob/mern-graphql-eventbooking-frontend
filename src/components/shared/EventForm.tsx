@@ -22,7 +22,7 @@ type Props = {
     eventId?: string,
 }
 
-type GetAllEventResponse = {
+export type GetAllEventResponse = {
     events:EventType[]
 }
 
@@ -40,8 +40,8 @@ const formSchema = z.object({
 
 const EventForm = ({ type, event, eventId}: Props) => {
     const formValue = type === "Update" ? {...event,
-        price:event.price.toString(),
-        startDate:new Date(event.startDate),endDate:new Date(event.endDate)} : event
+        price:event?.price?.toString(),
+        startDate:new Date(event?.startDate),endDate:new Date(event?.endDate)} : event
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: formValue

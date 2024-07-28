@@ -20,7 +20,7 @@ const UpdateEventPage = () => {
         <div className="w-full px-4 md:px-10">
             <h5 className=" text-[26px] md:text-[36px] text-black text-center font-bold mt-5 mb-7">Update Event</h5>
             <div className="w-full flex flex-col justify-center items-center">
-                <EventForm type="Update" event={data.event} eventId={id}/>
+                <EventForm type="Update" event={data?.event} eventId={id}/>
             </div>
         </div>
     )

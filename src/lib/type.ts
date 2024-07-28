@@ -83,3 +83,20 @@ export type EventDetail = {
         phoneNumber:number
     }
 }
+
+export type UserProfileType = {
+    email:string
+    name:string
+    profilePicture:string
+    gender:string
+    phoneNumber:string,
+    event:EventType[],
+    BookedEvent: {
+        ticketDetail:{
+          id:string,
+          price:number,
+          title:string,
+          quantity:string
+        }
+      }[]
+}

@@ -5,6 +5,9 @@ import { format } from "date-fns"
 import { Card } from "../ui/card"
 import { Separator } from "../ui/separator"
 import { useState } from "react"
+import { useMutation } from "@apollo/client"
+import { CHECKOUTSESSION } from "@/graphql/mutations/bookingMutation"
+import { toast } from "sonner"
 
 type Props = {
   event: EventType
@@ -34,10 +37,31 @@ const EventCheckout = ({ event }: Props) => {
     const total = event.price * ticketNumber.ticket
     return total.toFixed(2)
   }
+  const [checkoutsession,{loading}] = useMutation(CHECKOUTSESSION,{
+    variables:{input:{
+       id:event._id.toString(),
+       title:event.title,
+       quantity:ticketNumber.ticket.toString(),
+       price:event.price
+    }}
+  })
+  const handleCheckout = async()=>{
+    try{
+      const data =  await checkoutsession()
+     window.location.href =  data.data.createCheckOutSession.url
+      
+    }catch(error){
+      if(error instanceof Error){
+        toast.error(error.message)
+      }else{
+        toast.error("Unexpected error")
+      }
+    }
+  }
   return (
     <Dialog>
       <DialogTrigger>
-        <Button className="bg-primaryBlue hover:bg-primaryBlue text-white hover:text-white w-full">
+        <Button className="bg-primaryBlue hover:bg-primaryBlue text-white hover:text-white w-full" >
           Book now
         </Button>
       </DialogTrigger>
@@ -100,8 +124,11 @@ const EventCheckout = ({ event }: Props) => {
             }
              {/**checkout button */}
              <Button className="w-full bg-primaryBlue hover:bg-primaryBlue text-white hover:text-white mt-3"
-             disabled={ticketNumber.ticket < 1}>
-               Checkout
+             disabled={ticketNumber.ticket < 1}
+             onClick={handleCheckout}>
+              {
+                loading ? "loading...":" Checkout"
+              }
              </Button>
 
           </div>

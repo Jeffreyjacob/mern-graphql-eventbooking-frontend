@@ -41,3 +41,15 @@ export const RESETPASSWORD = gql`
   }
 }
 `
+
+export const UPDATE_USER = gql`
+ mutation UpdateUser($input:UpdateUserInput!){
+  updateUser(input:$input) {
+    name,
+    gender,
+    profilePicture,
+    phoneNumber,
+    email
+ }
+ }
+`
