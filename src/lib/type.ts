@@ -98,5 +98,6 @@ export type UserProfileType = {
           title:string,
           quantity:string
         }
+        totalAmount:string
       }[]
 }

@@ -41,7 +41,8 @@ export const USER = gql`
         price,
         title,
         quantity
-      }
+      },
+      totalAmount
     }
    }
  }
